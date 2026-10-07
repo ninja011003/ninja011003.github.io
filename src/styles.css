@@ -542,7 +542,7 @@ main {
 
 .hero__tagline {
   margin-top: 24px;
-  max-width: 52ch;
+  max-width: 44ch;
   font-size: clamp(1rem, 2.2vw, 1.15rem);
   color: var(--muted);
 }

@@ -169,9 +169,29 @@ function drawFault(ctx, kind, x, y, r, color, strike) {
   }
 }
 
+// Plot area. On wide screens it sits to the right of the hero text, starting a
+// fixed gap after wherever that text actually ends, so the two never overlap.
+// Without enough room beside the text it falls back to a full-width layout.
+const TEXT_GAP = 56
+const MIN_PLOT_WIDTH = 340
+
+// right edge of the rendered hero text (a Range measures the glyphs, not the
+// full-width block boxes they sit in)
+const range = typeof document !== 'undefined' ? document.createRange() : null
+function heroTextRight() {
+  let right = 0
+  for (const el of document.querySelectorAll('.hero__content > *')) {
+    range.selectNodeContents(el)
+    right = Math.max(right, range.getBoundingClientRect().right)
+  }
+  return right
+}
+
 function region(w, h) {
-  const wide = w > 900
-  return wide ? { l: w * 0.5, r: w * 0.9, t: h * 0.2, b: h * 0.74 } : { l: w * 0.1, r: w * 0.9, t: h * 0.3, b: h * 0.72 }
+  const l = Math.max(w * 0.5, heroTextRight() + TEXT_GAP)
+  const r = w * 0.93
+  if (w > 900 && r - l >= MIN_PLOT_WIDTH) return { l, r, t: h * 0.2, b: h * 0.74 }
+  return { l: w * 0.1, r: w * 0.9, t: h * 0.3, b: h * 0.72 }
 }
 
 export default function DataScienceBg({ active, weight, pal, reduced }) {
