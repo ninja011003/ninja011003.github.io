@@ -1206,6 +1206,10 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* light tint and a slight blur so the regression scene behind stays visible */
+  background: color-mix(in srgb, var(--surface) 30%, transparent);
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
 }
 
 @media (min-width: 640px) {
@@ -1315,6 +1319,8 @@ main {
   z-index: 1;
   border-top: 1px solid var(--border);
   padding: 20px 0 28px;
+  /* solid strip so the background scene's caption doesn't collide with the footer text */
+  background: var(--bg);
 }
 
 .footer__top:hover {
