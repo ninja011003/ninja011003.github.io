@@ -171,7 +171,8 @@ function drawFault(ctx, kind, x, y, r, color, strike) {
 
 // Plot area. On wide screens it sits to the right of the hero text, starting a
 // fixed gap after wherever that text actually ends, so the two never overlap.
-// Without enough room beside the text it falls back to a full-width layout.
+// Without enough room beside the text (phones, narrow windows) there is no
+// plot area and the scene draws nothing.
 const TEXT_GAP = 56
 const MIN_PLOT_WIDTH = 340
 
@@ -191,7 +192,7 @@ function region(w, h) {
   const l = Math.max(w * 0.5, heroTextRight() + TEXT_GAP)
   const r = w * 0.93
   if (w > 900 && r - l >= MIN_PLOT_WIDTH) return { l, r, t: h * 0.2, b: h * 0.74 }
-  return { l: w * 0.1, r: w * 0.9, t: h * 0.3, b: h * 0.72 }
+  return null
 }
 
 export default function DataScienceBg({ active, weight, pal, reduced }) {
@@ -226,6 +227,7 @@ export default function DataScienceBg({ active, weight, pal, reduced }) {
       }
       const key = stage < STAGES.length ? STAGES[stage].key : 'dissolve'
       const R = region(w, h)
+      if (!R) return ' ' // hidden: no room beside the hero text
       const RW = R.r - R.l
       const RH = R.b - R.t
       const n = d.pts.length
