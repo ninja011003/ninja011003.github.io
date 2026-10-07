@@ -1,0 +1,9 @@
+node_modules
+dist
+.DS_Store
+
+# local tooling config (contains machine-specific paths)
+.claude/
+
+# the site serves public/niranjan_resume.pdf; this root copy is just the source file
+/niranjan_resume.pdf
