@@ -1020,8 +1020,46 @@ main {
   flex-wrap: wrap;
 }
 
+.wheel__arrows {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 2%;
+  pointer-events: none;
+}
+
+.wheel__arrow {
+  /* starts partway down the cards, then sticks to the middle of the screen */
+  position: sticky;
+  top: calc(50vh - 22px);
+  margin-top: 110px;
+  width: 44px;
+  height: 44px;
+  pointer-events: auto;
+  color: var(--text);
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  border-color: var(--border-strong);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.wheel__arrow:hover {
+  transform: scale(1.06);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 .wheel__arrow--prev svg {
   transform: rotate(180deg);
+}
+
+@media (max-width: 899px) {
+  .wheel__arrows {
+    padding: 0;
+  }
 }
 
 .wheel__dots {

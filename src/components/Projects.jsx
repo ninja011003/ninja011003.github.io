@@ -250,12 +250,30 @@ export default function Projects() {
               </Card>
             ))}
           </div>
+
+          {/* arrows sit on the carousel's edges and stick to the middle of the
+              screen while it's in view, so they're always reachable */}
+          <div className="wheel__arrows">
+          <button
+            className="icon-btn wheel__arrow wheel__arrow--prev"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={() => go(-1)}
+            aria-label="Previous project"
+          >
+            <ArrowIcon />
+          </button>
+          <button
+            className="icon-btn wheel__arrow wheel__arrow--next"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={() => go(1)}
+            aria-label="Next project"
+          >
+            <ArrowIcon />
+          </button>
+          </div>
         </div>
 
         <div className="wheel__controls">
-          <button className="icon-btn wheel__arrow wheel__arrow--prev" onClick={() => go(-1)} aria-label="Previous project">
-            <ArrowIcon />
-          </button>
           <div className="wheel__dots" role="tablist" aria-label="Choose a project">
             {projects.map((p, i) => (
               <button
@@ -268,10 +286,7 @@ export default function Projects() {
               />
             ))}
           </div>
-          <button className="icon-btn wheel__arrow" onClick={() => go(1)} aria-label="Next project">
-            <ArrowIcon />
-          </button>
-          <span className="wheel__hint mono">drag or swipe to turn</span>
+          <span className="wheel__hint mono">drag, swipe or use the arrows to turn</span>
         </div>
       </motion.div>
     </Section>
