@@ -18,6 +18,8 @@ import { ArrowIcon, ExternalIcon } from './Icons'
 
 const n = projects.length
 const SPRING = { type: 'spring', stiffness: 170, damping: 26 }
+const MIN_FIT = 0.65 // never shrink the cards below this, so text stays readable
+const STAGE_PAD = 24
 
 // position of card `index` relative to the centre, wrapped to (-n/2, n/2]
 const offsetOf = (index, pos) => {
@@ -127,7 +129,8 @@ export default function Projects() {
   const faces = useRef([])
   const pos = useMotionValue(0)
   const [active, setActive] = useState(0)
-  const [size, setSize] = useState({ width: 380, height: 520, stage: 1100 })
+  const [size, setSize] = useState({ width: 380, height: 520, stage: 1100, fit: 1 })
+  const controls = useRef()
   const drag = useRef(null)
   const justDragged = useRef(false)
   const wheelIdle = useRef()
@@ -140,13 +143,31 @@ export default function Projects() {
       // natural height of each card's content (the card itself is stretched to the stage)
       const bodies = faces.current.filter(Boolean).map((f) => f.querySelector('.project__body'))
       const height = Math.max(...bodies.filter(Boolean).map((b) => b.offsetHeight), 300)
-      setSize((s) => (s.width === width && s.height === height && s.stage === w ? s : { width, height, stage: w }))
+      // shrink the cards so heading, carousel and controls fit on one screen
+      const section = document.getElementById('projects')
+      let fit = 1
+      if (section && stage.current && controls.current) {
+        const navOffset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
+        const padTop = parseFloat(getComputedStyle(section).paddingTop) || 0
+        const aboveStage = stage.current.getBoundingClientRect().top - section.getBoundingClientRect().top - padTop
+        const below = controls.current.offsetHeight + 28 + 16
+        const available = window.innerHeight - navOffset - padTop - aboveStage - below - STAGE_PAD
+        fit = Math.min(1, Math.max(MIN_FIT, available / height))
+      }
+      fit = Math.round(fit * 100) / 100
+      setSize((s) =>
+        s.width === width && s.height === height && s.stage === w && s.fit === fit ? s : { width, height, stage: w, fit },
+      )
     }
     measure()
     const ro = new ResizeObserver(measure)
     if (stage.current) ro.observe(stage.current)
+    window.addEventListener('resize', measure)
     faces.current.forEach((f) => f?.querySelector('.project__body') && ro.observe(f.querySelector('.project__body')))
-    return () => ro.disconnect()
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', measure)
+    }
   }, [])
 
   // side cards sit just inside the container; on narrow screens they peek out from behind
@@ -190,7 +211,7 @@ export default function Projects() {
         <div
           ref={stage}
           className="wheel"
-          style={{ height: size.height + 40 }}
+          style={{ height: size.height * size.fit + STAGE_PAD }}
           tabIndex={0}
           role="region"
           aria-roledescription="carousel"
@@ -241,7 +262,10 @@ export default function Projects() {
             snapTo(Math.round(pos.get()))
           }}
         >
-          <div className="wheel__pivot" style={{ width: size.width, height: size.height }}>
+          <div
+            className="wheel__pivot"
+            style={{ width: size.width, height: size.height, transform: `scale(${size.fit})`, transformOrigin: '50% 0' }}
+          >
             {projects.map((p, i) => (
               <Card key={p.title} index={i} pos={pos} spacing={spacing} active={i === active} onSelect={select}>
                 <div ref={(el) => (faces.current[i] = el)}>
@@ -273,7 +297,7 @@ export default function Projects() {
           </div>
         </div>
 
-        <div className="wheel__controls">
+        <div className="wheel__controls" ref={controls}>
           <div className="wheel__dots" role="tablist" aria-label="Choose a project">
             {projects.map((p, i) => (
               <button

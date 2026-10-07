@@ -960,7 +960,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 20px;
+  padding-top: 12px;
   perspective: 1400px;
   perspective-origin: 50% 45%;
   cursor: grab;
@@ -1002,6 +1002,48 @@ main {
 
 .wheel .project__body {
   height: auto;
+  padding: 22px 24px;
+}
+
+.wheel .project__head {
+  margin-bottom: 18px;
+}
+
+.wheel .project__title {
+  font-size: 1.35rem;
+  margin-bottom: 8px;
+}
+
+.wheel .project__desc {
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+}
+
+.wheel .project__highlights {
+  padding-top: 14px;
+  margin-bottom: 16px;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+/* less space above the carousel so it fits on one screen */
+#projects.section {
+  padding-top: 32px;
+}
+
+/* on shorter screens the cards drop their bullet points and keep the
+   description and tech tags, so they need much less shrinking to fit */
+@media (max-height: 860px) {
+  .wheel .project__highlights {
+    display: none;
+  }
+  .wheel .project__desc {
+    margin-bottom: 18px;
+  }
+}
+
+#projects .section__title {
+  margin-bottom: 20px;
 }
 
 /* solid cards: blur and see-through panels misbehave inside 3D transforms */
@@ -1012,7 +1054,7 @@ main {
 }
 
 .wheel__controls {
-  margin-top: 28px;
+  margin-top: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
