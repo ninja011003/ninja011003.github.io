@@ -750,21 +750,23 @@ main {
   }
 }
 
-.descent {
+/* the two graphic cards share a layout: value, then the graphic below it */
+.descent,
+.rating {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .descent .stat__value {
   white-space: nowrap;
 }
 
-.descent__plot {
-  flex: 1 1 80px;
-  max-width: 120px;
+.descent__plot,
+.rating__spark {
+  width: 100%;
+  max-width: 130px;
   height: 40px;
   overflow: visible;
 }
@@ -793,22 +795,8 @@ main {
   }
 }
 
-.rating {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
 .rating__link {
   display: block;
-}
-
-.rating__spark {
-  width: 56px;
-  height: 28px;
-  flex-shrink: 0;
-  overflow: visible;
 }
 
 .rating__spark polyline {

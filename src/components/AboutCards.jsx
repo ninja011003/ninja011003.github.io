@@ -127,7 +127,7 @@ export function DescentCard() {
       <span className="stat__value">
         ∇<small> → </small>0
       </span>
-      <svg viewBox="0 0 120 50" className="descent__plot" aria-hidden="true">
+      <svg viewBox="0 0 120 50" preserveAspectRatio="xMinYMid meet" className="descent__plot" aria-hidden="true">
         <polyline points={curve} className="descent__curve" />
         <polyline ref={trail} className="descent__trail" />
         <circle ref={ball} cx={toX(-0.95)} cy={curveY(-0.95) - 3.5} r="3.5" className="descent__ball" />
@@ -157,9 +157,9 @@ export function RatingCard({ value }) {
       <span className="stat__value" ref={ref}>
         0
       </span>
-      <svg viewBox="0 0 64 32" className={`rating__spark ${inView ? 'is-drawn' : ''}`} aria-hidden="true">
-        <polyline points="2,28 12,24 20,26 30,17 38,19 48,10 62,4" pathLength="1" />
-        <circle cx="62" cy="4" r="2.6" />
+      <svg viewBox="0 0 120 40" preserveAspectRatio="xMinYMid meet" className={`rating__spark ${inView ? 'is-drawn' : ''}`} aria-hidden="true">
+        <polyline points="3,35 20,30 34,32 52,22 66,25 84,14 98,16 116,6" pathLength="1" />
+        <circle cx="116" cy="6" r="3" />
       </svg>
     </div>
   )
